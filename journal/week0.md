@@ -14,7 +14,7 @@ Installed AWS CLI using my GitPod environment
 
 ### Install AWS CLI
 
-- Followed the (Youtube video)[https://www.youtube.com/watch?v=OdUnNuKylHg&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=14] and (AWS documentation)[https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html]
+- Followed the [Youtube video](https://www.youtube.com/watch?v=OdUnNuKylHg&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=1) and [AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 - Added the following task to my .gitpod.yml file to ensure awscli is always installed 
 
