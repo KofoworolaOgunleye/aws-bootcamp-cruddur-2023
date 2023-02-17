@@ -69,6 +69,22 @@ aws cloudwatch put-metric-alarm --cli-input-json file://aws/json/alarm_config.js
 <img width="1397" alt="Screenshot 2023-02-16 at 22 15 51" src="https://user-images.githubusercontent.com/22412589/219663429-078e4c71-3c6a-4c08-8d4a-6dfaa7ae6c62.png">
 <img width="1402" alt="Screenshot 2023-02-16 at 22 15 19" src="https://user-images.githubusercontent.com/22412589/219663432-e2341603-b5ba-464d-b95a-d2a14adc3cc7.png">
 
+### Homework Challenges
+- Used EventBridge to send sns notification when there is a health service issue following this [aws guide](https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html#creating-event-bridge-events-rule-for-aws-health)
+ <img width="1439" alt="Screenshot 2023-02-17 at 15 39 17" src="https://user-images.githubusercontent.com/22412589/219699055-d646d7f4-cf45-4638-8722-28ab42936e5f.png">
+
+- Researched AWS Service Limits/Quota
+  It is used to guarantee the availability of AWS resources and prevent accidental provisioning of more resources than needed. They are AWS Region specific and aren't charged when increased. You are only if you launch or use AWS resources or services.
+  The downside to Servive quota is the response time which takes about 24-48 hours and this can affect developers that work on project that have time contraints. A way to fix this is to create a cloudwatch alarm that notifies you and sends an sns when alarm is in `ALARM state`, `OK state`, or `INSUFFICIENT_DATA` state when you are close to a quota value threshold, so you can request an increase well ahead of time.
+
+- Used Cloudwatch alarm for notification when you are close to a quota value threshold following this [guide](https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html)
+  <img width="1510" alt="Screenshot 2023-02-17 at 16 11 27" src="https://user-images.githubusercontent.com/22412589/219705996-01b4ec1a-e599-4bb4-9960-31d70661b6d6.png">
+
+- Requested Dynamodb service quota increase by going to `Service Quotas` -> `select service of choice` -> `choose Quota name` -> `write a quota value greater than current quota`
+
+  I chose to increase Dynamodb maximum number of tables from `2500` to `2700` in `us-east-1`
+![Screenshot 2023-02-17 at 16 00 18](https://user-images.githubusercontent.com/22412589/219703526-be179d9e-cd3e-43b1-b82a-bb03b638f938.png)
+![Screenshot 2023-02-17 at 16 00 38](https://user-images.githubusercontent.com/22412589/219703592-2bf82bf4-ce89-43bb-88c8-e2bff9f7a64b.png)
 
 
 ### Challenges
