@@ -85,6 +85,10 @@ aws cloudwatch put-metric-alarm --cli-input-json file://aws/json/alarm_config.js
   I chose to increase Dynamodb maximum number of tables from `2500` to `2700` in `us-east-1`
 ![Screenshot 2023-02-17 at 16 00 18](https://user-images.githubusercontent.com/22412589/219703526-be179d9e-cd3e-43b1-b82a-bb03b638f938.png)
 ![Screenshot 2023-02-17 at 16 00 38](https://user-images.githubusercontent.com/22412589/219703592-2bf82bf4-ce89-43bb-88c8-e2bff9f7a64b.png)
+Limit Increase request was approved
+![Screenshot 2023-02-20 at 09 26 00](https://user-images.githubusercontent.com/22412589/220065687-05ff4f3d-8c6e-40da-9412-d91ab1cf9915.png)
+
+  
 
 
 ### Challenges
