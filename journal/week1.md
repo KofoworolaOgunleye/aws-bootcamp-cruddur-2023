@@ -1,22 +1,23 @@
 # Week 1 — App Containerization
 * [Streched Homework](#stretched-homework)
   * [Changed GitPod Port Visibility](#changed-gitpod-port-visibility)
+  * [Added npm install to gitpod yaml](#added-npm-install-to-gitpod-yaml)
   * [Run Dockerfile CMD as an external script](#run-dockerfile-cmd-as-an-external-script)
   * [Push and tag an image to Dockerhub](#push-and-tag-an-image-to-dockerhub)
   * [Use multi-stage building for Dockerfile build](#use-multi-stage-building-for-dockerfile-build)
   * [Dockerfiles best practices](#dockerfiles-best-practices)
   * [Helpful Commands](#helpful-commands)
   * [Challenges](#challenges)
+ 
+* [Required Homework](#required-homework)
 
-- created the notification feature for the frontend and backend
-![Screenshot 2023-02-24 at 10 28 58](https://user-images.githubusercontent.com/22412589/221156102-6ee589d2-a2ef-4e73-a242-6e2dd768fa86.png)
 
 ## Stretched Homework
 
 ### Changed GitPod Port Visibility
   - using the GitPod documentation, I changed gitpod port visibility to public in .gitpod.yml file
-  ```
-    ports:
+  ``` 
+  ports:
     - name: Backend
       port: 4567
       visibility: public
@@ -30,7 +31,8 @@
       port: 5432
       visibility: public
   ```
- - Added npm install to .gitpod.yaml file to all npm be automatically installed on launching gitpod
+ ### Added npm install to gitpod yaml
+  - Added npm install to .gitpod.yaml file to all npm be automatically installed on launching gitpod
  ```
  - name: npm-install
     init: |
@@ -130,8 +132,134 @@
 - `docker stop <Container_ID>` - stop container
 - `docker rm <Container_ID>` - remove container
 - `docker history backend-flask`- see size of each layer
+- `docker logs CONTAINER_ID -f` - check container logs
+- `docker exec CONTAINER_ID -it /bin/bash -  enter into the container
+- `docker ps`
 
 ## Challenges
 - while using multi stage build, my container kept exiting due to the error:
    `exec /usr/local/bin/python3: no such file or directory`
 - sorted this out by running `whereis python3` to get the right path
+
+
+## Required Homework
+ ### Containerise Backend
+  - added public port visibility to .gitpod.yml as shown [above](#changed-gitpod-port-visibility)  
+  - created a Dockerfile in the `backend-flask` folder
+  ```
+  FROM python:3.10-slim-buster
+
+WORKDIR /backend-flask
+
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+
+COPY . .
+
+ENV FLASK_ENV=development
+
+EXPOSE ${PORT}
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
+```
+ - Built and ran the container using `docker build -t  backend-flask ./backend-flask` and `docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flask`
+    - Another way to do this is by exporting the variables 
+     ```
+     export FRONTEND_URL="*"
+     export BACKEND_URL="*"
+     ```
+     and using this `docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask` to get the variables locally
+     
+     Then unset the variables using
+     ```
+     unset FRONTEND_URL="*"
+     unset BACKEND_URL="*"
+     ```
+ ### Containerise Frontend
+ - add npm install into .gitpod.yml to install it when [gitpod](#added-npm-install-to-gitpod-yaml) is run
+ - create a Dockerfile in `frontend-react-js` folder
+   ```
+   FROM node:16.18
+
+   ENV PORT=3000
+
+   COPY . /frontend-react-js
+   WORKDIR /frontend-react-js
+   RUN npm install
+   EXPOSE ${PORT}
+   CMD ["npm", "start"]
+   ```
+ - Build and run container
+   `docker build -t frontend-react-js ./frontend-react-js`
+   `docker run -p 3000:3000 -d frontend-react-js`
+   
+ ### Use Docker-compose to run multiple containers
+ - Create a `docker-compose.yml` at the root
+ ```
+ version: "3.8"
+ services:
+  backend-flask:
+    environment:
+      FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+      BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+    build: ./backend-flask
+    ports:
+      - "4567:4567"
+    volumes:
+      - ./backend-flask:/backend-flask
+  frontend-react-js:
+    environment:
+      REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+    build: ./frontend-react-js
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend-react-js:/frontend-react-js
+networks: 
+  internal-network:
+    driver: bridge
+    name: cruddur
+ ```
+ 
+ ### Add Local DynamoDB and Postgres
+ - For Dynamodb, add this to `docker-compose.yml`
+ ```
+ services:
+  dynamodb-local:
+    user: root
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+ ```
+ -  For Postgres
+ ```
+ services:
+  db:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
+ ```
+   - Install postgres client into gitpod
+    ```
+    - name: postgres
+    init: |
+      curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+      echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+      sudo apt update
+      sudo apt install -y postgresql-client-13 libpq-dev
+    ```
+  - created the notification feature for the frontend and backend
+   ![Screenshot 2023-02-24 at 10 28 58](https://user-images.githubusercontent.com/22412589/221156102-6ee589d2-a2ef-4e73-a242-6e2dd768fa86.png)
