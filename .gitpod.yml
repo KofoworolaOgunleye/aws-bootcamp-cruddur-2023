@@ -11,7 +11,7 @@ tasks:
 ports:
   - name: Backend
     port: 4567
-    visibility: private
+    visibility: public
   - name: Frontend
     port: 3000
     visibility: public
