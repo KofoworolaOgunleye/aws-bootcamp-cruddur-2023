@@ -12,4 +12,17 @@
   - name: Frontend
     port: 3000
     visibility: public
+  - name: Dynamodb
+    port: 8000
+    visibility: public
+  - name: Postgres
+    port: 5432
+    visibility: public
+  ```
+ - Added npm install to .gitpod.yaml file to all npm be automatically installed on launching gitpod
+ ```
+ - name: npm-install
+    init: |
+      cd /workspace/aws-bootcamp-cruddur-2023/frontend-react-js
+      npm install
   ```
