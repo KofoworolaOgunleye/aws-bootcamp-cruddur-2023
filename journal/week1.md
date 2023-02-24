@@ -52,6 +52,22 @@
 
 ### Push and tag an image to Dockerhub
 - sign in to [Docker](https://hub.docker.com/)
+- create a repository 
+- login to docker on your terminal using
+ `docker login`
+ `WARNING! Your password will be stored unencrypted in /home/gitpod/.docker/config.json.`
+   - using `docker logout` fixes this by deleting your credentials from `.docker/config.json` . Check `cd /home/gitpod/.docker/config.json` to confirm
+- build and tag a new image
+  `docker build -t <hub-user>/<repo-name>[:<tag>]`
+- retag an existing local image e.g backend-flask
+ `docker tag <existing-image> <hub-user>/<repo-name>[:<tag>]`
+ `docker tag backend-flask kofoworolaogunleye/aws-cruddur-bootcamp:1.0`
+- push image
+  `docker push <hub-user>/<repo-name>:<tag>`
+  `docker push kofoworolaogunleye/aws-cruddur-bootcamp:1.0`
+  
+  <img width="752" alt="Screenshot 2023-02-24 at 19 39 26" src="https://user-images.githubusercontent.com/22412589/221275282-86564130-364a-4af1-8066-2c5f9664408f.png">
+
 ### Use multi-stage building for Dockerfile build
 ### Dockerfiles best practices
 
