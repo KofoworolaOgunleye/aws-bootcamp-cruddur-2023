@@ -1,5 +1,22 @@
 # Week 0 — Billing and Architecture
 
+* [Required Homework](#required-homework)
+   * [Recreating the Conceptual Diagram](#recreating-the-conceptual-diagram)
+   * [Recreating the Logical Diagram](#recreating-the-logical-diagram)
+   * [Getting the AWS CLI Working](#getting-the-aws-cli-working)
+   * [Install AWS CLI](#install-aws-cli)
+   * [Set up a virtual mfa device for root account](#set-up-a-virtual-mfa-device-for-root-account)
+   * [Created a new Admin user with virtual MFA, console and CLI access](#created-a-new-admin-user-with-virtual-mfa-console-and-cli-access)
+   * [Created budget using the template provided and set 3 alerts](#created-budget-using-the-template-provided-and-set-3-alerts)
+   * [Created CloudWatch Alarm](#created-cloudwatch-alarm)
+   * [Used awscli to create budgets using the new user credentials](#used-awscli-to-create-budgets-using-the-new-user-credentials)
+   * [Created sns topic and subscription using the console and cli](#created-sns-topic-and-subscription-using-the-console-and-cli)
+* [Homework Challenges](#homework-challenges)
+* [Challenges](#challenges)
+* [Helpful Commands](#helpful-commands)
+
+## Required Homework
+
 ## Recreating the Conceptual Diagram
 
 [Lucid Chart link](https://lucid.app/lucidchart/43284478-4650-4cce-908b-328f5692f038/edit?beaconFlowId=ED15A221B8888F08&invitationId=inv_a5df00dc-abfa-4114-93c9-6b2c8c3ae1fd&page=0_0#)
@@ -98,7 +115,7 @@ Fixed it by logging in as a root user account and following this [aws documentat
 
 - Gitpod wasn’t pushing my changes to GitHub, fixed it by giving gitpod the permission to read, write my public repos.
 
-### Helpful Commannds
+### Helpful Commands
 
 - `aws --cli-auto-prompt`; for aws command autocompletion
 - `aws sts get-caller-identity`; checks what user is logged in. 
