@@ -11,6 +11,24 @@ ENV FLASK_ENV=development
 
 EXPOSE ${PORT}
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
-# python3 -m flask run --host=0.0.0.0 --port=4567
 
-#FRONTEND_URL="*" BACKEND_URL="*" docker run --rm -p 4567:4567 -it backend-flask
+
+# # multi stage build
+
+# # Build stage
+#   FROM python:3.10-slim-buster AS base
+
+#   WORKDIR /backend-flask
+
+#   COPY requirements.txt requirements.txt
+#   RUN pip3 install -r requirements.txt
+
+# # Runtime stage
+#   FROM python:3.10-alpine 
+#   COPY --from=base /usr/local/lib/python3.10/site-packages/ /usr/local/lib/python3.10/site-packages/ 
+#   COPY --from=base /usr/bin/ /usr/bin/
+#   COPY . .
+#   ENV FLASK_ENV=development
+
+#   EXPOSE ${PORT}
+#   CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
