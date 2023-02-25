@@ -133,7 +133,7 @@
 - `docker rm <Container_ID>` - remove container
 - `docker history backend-flask`- see size of each layer
 - `docker logs CONTAINER_ID -f` - check container logs
-- `docker exec CONTAINER_ID -it /bin/bash -  enter into the container
+- `docker exec CONTAINER_ID -it /bin/bash` -  enter into the container
 - `docker ps`
 
 ## Challenges
@@ -253,13 +253,14 @@ volumes:
     driver: local
  ```
    - Install postgres client into gitpod
-    ```
-    - name: postgres
-    init: |
-      curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
-      echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
-      sudo apt update
-      sudo apt install -y postgresql-client-13 libpq-dev
-    ```
+   
+ ```
+ - name: postgres
+   init: |
+     curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+     echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+     sudo apt update
+     sudo apt install -y postgresql-client-13 libpq-dev
+ ```
   - created the notification feature for the frontend and backend
    ![Screenshot 2023-02-24 at 10 28 58](https://user-images.githubusercontent.com/22412589/221156102-6ee589d2-a2ef-4e73-a242-6e2dd768fa86.png)
