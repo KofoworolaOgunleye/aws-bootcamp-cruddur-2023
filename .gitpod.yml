@@ -31,6 +31,9 @@ ports:
   - name: Postgres
     port: 5432
     visibility: public
+  - name: xray-daemon
+    port: 2000
+    visibility: public
 vscode:
   extensions:
     - 42Crunch.vscode-openapi
