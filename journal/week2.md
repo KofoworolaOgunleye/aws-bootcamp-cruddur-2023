@@ -140,3 +140,38 @@ AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
 ```
 - run `docker-compose up`
 <img width="1416" alt="Screenshot 2023-03-03 at 12 33 59" src="https://user-images.githubusercontent.com/22412589/222721365-8845dced-2158-4f9d-81ff-b8adfc4e5a47.png">
+
+### CloudWatch
+- add `watchtower` to `requirements.txt`. its a log handler for cloudwatch logs
+```
+"Watchtower is a lightweight adapter between the Python logging system and CloudWatch Logs. It uses the boto3 AWS SDK, and lets you plug your application logging directly into CloudWatch without the need to install a system-wide log collector like awscli-cwlogs and round-trip your logs through the instance's syslog. It aggregates logs into batches to avoid sending an API request per each log message, while guaranting a delivery deadline (60 seconds by default)."
+```
+- `pip3 install - r requirements.txt`
+- in `app.py`
+```
+import watchtower
+import logging
+from time import strftime
+
+# Configuring Logger to Use CloudWatch
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
+LOGGER.addHandler(console_handler)
+LOGGER.addHandler(cw_handler)
+LOGGER.info("some message")
+
+# for error logging after every request
+@app.after_request
+def after_request(response):
+    timestamp = strftime('[%Y-%b-%d %H:%M]')
+    LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+    return response
+```
+- set env vars in backend, `docker-compose.yml`
+```
+AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
+AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+```
